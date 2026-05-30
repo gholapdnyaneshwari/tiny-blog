@@ -1,3 +1,3 @@
-# Tiny Blog 📖
+# [Tiny Blog 📖] (https://tiny-blog-ui-6y2s.onrender.com/)
 
-This is a hooby project to understand how blog appliction work and their architectur.
+This is a hobby project to understand how blog appliction work and their architectur.
