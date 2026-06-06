@@ -6,4 +6,4 @@ function ReadBlog() {
   )
 }
 
-export default ReadBlog
+export default ReadBlog;

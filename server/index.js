@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
+import User from "./models/User.js";
+import md5 from "md5";
 
 const app = express();
 
@@ -51,6 +53,66 @@ app.get("/api/test1", (req, res) => {
 app.get("/api/test2", (req, res) => {
     console.log("Actual Controller test2 called");
     res.json({ message: "Test2 route reached" });
+});
+
+app.post("/signup", async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+
+        const newUser = new User({
+            name,
+            email,
+            password: md5(password)
+        });
+
+        await newUser.save();
+
+        res.json({
+            success: true,
+            message: "User saved successfully",
+            data: newUser
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
+app.post("/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const user = await User.findOne({
+            email,
+            password: md5(password)
+        }).select("-password");
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "Invalid email or password"
+            });
+        }
+
+        res.json({
+            success: true,
+            message: "Login successful",
+            data: user
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+app.get("/users", async (req, res) => {
+    const users = await User.find();
+    res.json(users);
 });
 
 
